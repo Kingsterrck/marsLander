@@ -34,9 +34,12 @@ void numerical_dynamics (void)
   
   totalForce = gravitationalForce + dragForce + thrust_wrt_world();
   acceleration = totalForce / totalMass;
-  position += delta_t * velocity;
-  velocity += delta_t * acceleration;
-  
+  temp = position;
+  position = 2*position - prevPosition + (delta_t)^2 * acceleration;
+  prevPosition = temp;
+  // position += delta_t * velocity;
+  // velocity += delta_t * acceleration;
+
   
   
 
@@ -76,6 +79,7 @@ void initialize_simulation (void)
     position = vector3d(1.2*MARS_RADIUS, 0.0, 0.0);
     velocity = vector3d(0.0, -3247.087385863725, 0.0);
     orientation = vector3d(0.0, 90.0, 0.0);
+    prevPosition = position;
     delta_t = 0.1;
     parachute_status = NOT_DEPLOYED;
     stabilized_attitude = false;
@@ -87,6 +91,7 @@ void initialize_simulation (void)
     position = vector3d(0.0, -(MARS_RADIUS + 10000.0), 0.0);
     velocity = vector3d(0.0, 0.0, 0.0);
     orientation = vector3d(0.0, 0.0, 90.0);
+    prevPosition = position;
     delta_t = 0.1;
     parachute_status = NOT_DEPLOYED;
     stabilized_attitude = true;
@@ -98,6 +103,7 @@ void initialize_simulation (void)
     position = vector3d(0.0, 0.0, 1.2*MARS_RADIUS);
     velocity = vector3d(3500.0, 0.0, 0.0);
     orientation = vector3d(0.0, 0.0, 90.0);
+    prevPosition = position;
     delta_t = 0.1;
     parachute_status = NOT_DEPLOYED;
     stabilized_attitude = false;
@@ -109,6 +115,7 @@ void initialize_simulation (void)
     position = vector3d(0.0, 0.0, MARS_RADIUS + LANDER_SIZE/2.0);
     velocity = vector3d(0.0, 0.0, 5027.0);
     orientation = vector3d(0.0, 0.0, 0.0);
+    prevPosition = position;
     delta_t = 0.1;
     parachute_status = NOT_DEPLOYED;
     stabilized_attitude = false;
@@ -120,6 +127,7 @@ void initialize_simulation (void)
     position = vector3d(0.0, 0.0, MARS_RADIUS + 100000.0);
     velocity = vector3d(4000.0, 0.0, 0.0);
     orientation = vector3d(0.0, 90.0, 0.0);
+    prevPosition = position;
     delta_t = 0.1;
     parachute_status = NOT_DEPLOYED;
     stabilized_attitude = false;
@@ -131,6 +139,7 @@ void initialize_simulation (void)
     position = vector3d(0.0, -(MARS_RADIUS + EXOSPHERE), 0.0);
     velocity = vector3d(0.0, 0.0, 0.0);
     orientation = vector3d(0.0, 0.0, 90.0);
+    prevPosition = position;
     delta_t = 0.1;
     parachute_status = NOT_DEPLOYED;
     stabilized_attitude = true;

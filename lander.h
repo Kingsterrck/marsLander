@@ -170,14 +170,14 @@ unsigned long long time_program_started;
 
 // Lander state - the visualization routines use velocity_from_positions, so not sensitive to 
 // any errors in the velocity update in numerical_dynamics
-vector3d position, orientation, velocity, velocity_from_positions, last_position;
+vector3d position, orientation, velocity, prevPosition, velocity_from_positions, last_position;
 double climb_speed, ground_speed, altitude, throttle, fuel;
 bool stabilized_attitude, autopilot_enabled, parachute_lost;
 parachute_status_t parachute_status;
 int stabilized_attitude_angle;
 
 // Orbital and closeup view parameters
-double orbital_zoom, save_orbital_zoom, closeup_offset, closeup_xr, closeup_yr, terrain_angle;
+double orbital_zoom, save_orbital_zoom, closeup_offset, closeup_xr, closeup_yr, terrain_angle, temp;
 quat_t orbital_quat;
 
 // For GL lights
