@@ -35,7 +35,7 @@ void numerical_dynamics (void)
   totalForce = gravitationalForce + dragForce + thrust_wrt_world();
   acceleration = totalForce / totalMass;
   temp = position;
-  position = 2*position - prevPosition + (delta_t)^2 * acceleration;
+  position = 2*position - prevPosition + ((delta_t*delta_t) * acceleration);
   prevPosition = temp;
   // position += delta_t * velocity;
   // velocity += delta_t * acceleration;
