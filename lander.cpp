@@ -8,7 +8,7 @@
 // for non-commercial purposes, provided that (a) its original authorship
 // is acknowledged and (b) no modified versions of the source code are
 // published. Restriction (b) is designed to protect the integrity of the
-// exercise for future generations of students. The authors would be happy
+// exercise for future generations of students. The authors would be happy1
 // to receive any suggested modifications by private correspondence to
 // ahg@eng.cam.ac.uk and gc121@eng.cam.ac.uk.
 
@@ -18,6 +18,27 @@ void autopilot (void)
   // Autopilot to adjust the engine throttle, parachute and attitude control
 {
   // INSERT YOUR CODE HERE
+  double altitude1 = position.abs2() - MARS_RADIUS;
+  double targetSpeed;
+  throttle = 1;
+  
+  if (parachute_status == NOT_DEPLOYED && altitude1 < 10000) {
+    parachute_status = DEPLOYED;
+  }
+  if (altitude1 < 100) {
+    targetSpeed = 1.0;
+  } else {
+    targetSpeed = altitude1 / 100;
+  }
+  if (velocity.abs2() > targetSpeed) {
+    if (velocity.abs2()-targetSpeed < 50) {
+      throttle = (velocity.abs2() - targetSpeed) / 50;
+    } else {
+      throttle = 1;
+    }
+  } else {
+    throttle = 0;
+  }
 }
 
 void numerical_dynamics (void)
