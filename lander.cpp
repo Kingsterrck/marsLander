@@ -18,11 +18,10 @@ void autopilot (void)
   // Autopilot to adjust the engine throttle, parachute and attitude control
 {
   // INSERT YOUR CODE HERE
-  double altitude1 = position.abs2() - MARS_RADIUS;
+  double altitude1 = position.abs() - MARS_RADIUS;
   double targetSpeed;
-  throttle = 1;
   
-  if (parachute_status == NOT_DEPLOYED && altitude1 < 10000) {
+  if (parachute_status == NOT_DEPLOYED && altitude1 < 5000) {
     parachute_status = DEPLOYED;
   }
   if (altitude1 < 100) {
@@ -30,9 +29,10 @@ void autopilot (void)
   } else {
     targetSpeed = altitude1 / 100;
   }
-  if (velocity.abs2() > targetSpeed) {
-    if (velocity.abs2()-targetSpeed < 50) {
-      throttle = (velocity.abs2() - targetSpeed) / 50;
+  double descentRate = abs(velocity * position.norm());
+  if (descentRate > targetSpeed) {
+    if (descentRate-targetSpeed < 20) {
+      throttle = (descentRate - targetSpeed) / 20;
     } else {
       throttle = 1;
     }
@@ -55,11 +55,11 @@ void numerical_dynamics (void)
   
   totalForce = gravitationalForce + dragForce + thrust_wrt_world();
   acceleration = totalForce / totalMass;
-  temp = position;
-  position = 2*position - prevPosition + ((delta_t*delta_t) * acceleration);
-  prevPosition = temp;
-  // position += delta_t * velocity;
-  // velocity += delta_t * acceleration;
+  //temp = position;
+  //position = 2*position - prevPosition + ((delta_t*delta_t) * acceleration);
+  //prevPosition = temp;
+  position += delta_t * velocity;
+  velocity += delta_t * acceleration;
 
   
   
