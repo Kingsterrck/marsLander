@@ -14,27 +14,50 @@
 
 #include "lander.h"
 
-void autopilot (void)
+void autopilot (double tm)
   // Autopilot to adjust the engine throttle, parachute and attitude control
 {
   // INSERT YOUR CODE HERE
   double altitude1 = position.abs() - MARS_RADIUS;
   double targetSpeed;
+  double descentRate = abs(velocity * position.norm());
   
-  if (parachute_status == NOT_DEPLOYED && altitude1 < 5000) {
+  double touchdownThreshold = 10;
+  double landingBurnThreshold = 400;
+  double parachuteDeploy = 8000;
+  double entryBurnThreshold = 70000;
+  
+  // deploy parachute
+  if (parachute_status == NOT_DEPLOYED && altitude1 < parachuteDeploy) {
     parachute_status = DEPLOYED;
   }
-  if (altitude1 < 100) {
-    targetSpeed = 1.0;
-  } else {
-    targetSpeed = altitude1 / 100;
+  
+  
+  if (altitude1 < touchdownThreshold) {
+    targetSpeed = 0.5;
+  } else if (altitude1 < landingBurnThreshold) {
+    targetSpeed = 0.12564 * altitude1 - 0.25641;
+  } else if (altitude1 < entryBurnThreshold) {
+    targetSpeed = 400;
   }
-  double descentRate = abs(velocity * position.norm());
+  
   if (descentRate > targetSpeed) {
-    if (descentRate-targetSpeed < 20) {
-      throttle = (descentRate - targetSpeed) / 20;
+    if (altitude1 < touchdownThreshold) {
+      if (descentRate > 1) {
+        throttle = 1;
+      } else {
+        throttle = 0.7 + 0.3 * (descentRate-0.5) / 0.5;
+      }
+    } else if (altitude1 < landingBurnThreshold) {
+      if (descentRate - targetSpeed >= 5) {
+        throttle = 1;
+      } else {
+        throttle = (descentRate - targetSpeed) / 5;
+      }
+    } else if (altitude1 > parachuteDeploy && altitude1 < entryBurnThreshold) {
+      throttle = 1; // high altitude control
     } else {
-      throttle = 1;
+      throttle = 0; // no throttle between 300 and 8k
     }
   } else {
     throttle = 0;
@@ -65,7 +88,7 @@ void numerical_dynamics (void)
   
 
   // Here we can apply an autopilot to adjust the thrust, parachute and attitude
-  if (autopilot_enabled) autopilot();
+  if (autopilot_enabled) autopilot(totalMass);
 
   // Here we can apply 3-axis stabilization to ensure the base is always pointing downwards
   if (stabilized_attitude) attitude_stabilization();
