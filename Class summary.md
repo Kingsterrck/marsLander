@@ -37,3 +37,25 @@
 ## 课程作业
 - Build Verlet integration for more accurate simulation
 - Build autopilot functionalities
+
+# 07.05
+## 预习部分
+无
+
+## 内容总结
+- Autopilot review
+- Introduction to the control systems
+- Introduction to Laplace transformation
+
+## 课程作业
+- Build autopilot
+
+# 07.07
+## 预习部分
+无
+
+## 内容总结
+- Autopilot debug (it barely works now)
+
+## 课程作业
+- Improve autopilot for better landings and compatible for engine lag
